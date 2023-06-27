@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "reactstrap";
+// import { Button } from "reactstrap";
+import { Button, Divider, List, Typography, Avatar } from "antd";
 
 const BusinessList = () => {
   const [businesses, setBusinesses] = useState([]);
@@ -98,13 +99,38 @@ const BusinessList = () => {
         ))}
       </ul> */}
 
-      <ul className="list">
+      {/* <ul className="list">
         {businesses.map((business) => (
           <li key={business.id}>
             <Link to={`/business/${business.id}`}>{business.name}</Link>
           </li>
         ))}
-      </ul>
+      </ul> */}
+
+      <List
+        itemLayout="horizontal"
+        dataSource={businesses}
+        renderItem={(item, index) => (
+          <List.Item
+            extra={
+              <img
+                className="responsiveIMG"
+                src={item.image_url}
+                alt={item.name}
+                key={index}
+              />
+            }
+          >
+            <List.Item.Meta
+              // avatar={
+              //   <Avatar src={item.image_url} alt={item.name} key={index} />
+              // }
+              title={<Link to={`/business/${item.id}`}>{item.name}</Link>}
+              description={item.alias}
+            />
+          </List.Item>
+        )}
+      />
 
       <div>
         <Button className="btn" onClick={() => handlePagination(-10)}>

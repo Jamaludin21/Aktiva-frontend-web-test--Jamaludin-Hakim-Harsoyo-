@@ -68,3 +68,27 @@ body {
   padding: 0;
 
 }
+
+.responsiveIMG {
+  width: 30%;
+  height: 50%;
+
+}
+
+@media (max-width: 768px) {
+  .responsiveIMG {
+  width: 20%;
+  height: 30%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .responsiveIMG {
+  width: 25%;
+  height: 40%;
+  }
+}
+
+.menu {
+  font-size: 20rem;
+}

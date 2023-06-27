@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Button } from "antd";
 class Navbar extends React.Component {
   render() {
     return (
@@ -15,7 +15,8 @@ class Navbar extends React.Component {
       //     </div>
       //     </nav>
       <ul class="navbar">
-        <a href="/">List Business</a>
+        <Button href="/">List Business</Button>
+        {/* <a href="/">List Business</a> */}
       </ul>
     );
   }

@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import BusinessList from "./BusinessList";
 import BusinessDetail from "./DetailBusiness";
 import Navbar from "./navbar";
-import { Button } from "reactstrap";
 
 function App() {
   return (
