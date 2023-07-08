@@ -1,6 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const corsAnywhere = require("cors-anywhere");
+const path = require("path");
 
 const app = express();
 const host = "127.0.0.1";
@@ -13,6 +14,9 @@ const API_LIST_URL =
 const API_DETAIL_URL = "https://api.yelp.com/v3/businesses/";
 
 app.use(express.json());
+app.use(express.static("public"));
+app.use(express.static("src"));
+app.use(express.static(path.join(__dirname, "..", "build")));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -21,10 +25,13 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/', (req, res) => {
-        console.log('Res', req)
-        res.sendFile(path.join(__dirname, '..', 'public', 'index.html'))
-    })
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, "..", "build", "index.html"));
+});
+
+app.get("/", (req, res) => {
+ res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 app.get("/businesses", async (req, res) => {
   try {
