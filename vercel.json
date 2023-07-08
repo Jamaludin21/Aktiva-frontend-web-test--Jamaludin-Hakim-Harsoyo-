@@ -1,17 +1,15 @@
 {
   "version": 2,
+  "builds": [
+    {
+      "src": "api.js",
+      "use": "@now/node"
+    }
+  ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api.js"
-    },
-    {
-      "src": "/(.*\\.(json|js|jsx|ts|tsx|css|png|jpg|jpeg|gif|svg|eot|otf|webp|ttf|woff|woff2|manifest|webmanifest|xml|txt))$",
-      "dest": "/src/$1"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/public/index.html"
+      "dest": "/src/index.js"
     }
   ]
 }
