@@ -1,36 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Button } from "antd";
-
-const API_KEY =
-  "q84UyfKL8ZFoo-gbZU4Ghbx2mL2ZYOlD7ThIdddAZ-ew1IHUC3tATJ_o_gfF29RgPTOWFeYTgEZyj2FEQSjUZ8vWY9K0S7uVYzCd0XQbmc5etaoHN2YJUvv5atCXZHYx";
-const API_URL = "https://proxy.cors.sh/https://api.yelp.com/v3/businesses/";
+// import { Carousel } from "react-responsive-carousel";
+// import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Button, Carousel, Col, Row, Card } from "antd";
+import axios from "axios";
+import {
+  SearchOutlined,
+  DownloadOutlined,
+  SendOutlined,
+} from "@ant-design/icons";
 
 const BusinessDetail = () => {
   const { id } = useParams();
   const [business, setBusiness] = useState(null);
 
+  const API_URL = "http://localhost:5000/businesses/";
+
   const fetchData = async () => {
     try {
-      const response = await fetch(`${API_URL}${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${API_KEY}`,
-          "x-cors-api-key": "temp_22596cf94491a5c040ff0a23d71b33d4",
-        },
-        mode: "cors",
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("====================================");
-        console.log(data);
-        console.log("====================================");
-        setBusiness(data);
-      } else {
-        throw new Error("Error fetching data from Yelp API");
-      }
+      const response = await axios.get(`${API_URL}${id}`);
+      setBusiness(response.data);
+      console.log("====================================");
+      console.log(response);
+      console.log("====================================");
     } catch (error) {
       console.error(error);
     }
@@ -44,50 +36,54 @@ const BusinessDetail = () => {
     return <div>Loading...</div>;
   }
 
-  const { name, photos, rating, coordinates, reviews } = business;
+  const { name, photos, rating, coordinates, review_count, location } =
+    business;
 
   return (
     <div>
-      <h1>{name}</h1>
+      <Row style={{ marginTop: "2rem" }}>
+        <Col span={15}>
+          <Card>
+            <Carousel autoplay>
+              {photos.map((photo) => (
+                <div key={id}>
+                  <img
+                    src={photo}
+                    alt={name}
+                    key={photo}
+                    style={{ maxHeight: "500px", width: "1000px" }}
+                  />
+                </div>
+              ))}
+            </Carousel>
+          </Card>
+        </Col>
 
-      {photos && photos.length > 0 ? (
-        <div>
-          <h2>Foto</h2>
-          <div className="slideshow">
-            {photos.map((photo) => (
-              <img src={photo} alt={name} key={photo} />
-            ))}
-          </div>
-        </div>
-      ) : null}
+        <Col span={9}>
+          <Card>
+            {rating && (
+              <div>
+                <h2>{name}</h2>
+                <p>{location.cross_streets}</p>
+                <Button
+                  type="primary"
+                  icon={<SendOutlined />}
+                  href={`https://www.google.com/maps/search/?api=1&query=${coordinates.latitude},${coordinates.longitude}`}
+                  target="_blank"
+                >
+                  {location.city},{location.country}
+                </Button>
+              </div>
+            )}
+          </Card>
 
-      {rating && (
-        <div>
-          <h2>Penilaian</h2>
-          <p>Rating: {rating}</p>
-          <a
-            href={`https://www.google.com/maps/search/?api=1&query=${coordinates.latitude},${coordinates.longitude}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Buka di Google Maps
-          </a>
-        </div>
-      )}
-
-      {reviews && reviews.length > 0 ? (
-        <div>
-          <h2>Review</h2>
-          <ul>
-            {reviews.map((review) => (
-              <li key={review.id}>
-                <p>{review.text}</p>
-                <p>Rating: {review.rating}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
+          <Card style={{ marginTop: "2rem" }}>
+            <h2>Review Count :</h2>
+            <br></br>
+            <h3>{review_count}</h3>
+          </Card>
+        </Col>
+      </Row>
     </div>
   );
 };

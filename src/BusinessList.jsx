@@ -1,7 +1,32 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 // import { Button } from "reactstrap";
-import { Button, Divider, List, Typography, Avatar } from "antd";
+import axios from "axios";
+import {
+  SearchOutlined,
+  DownloadOutlined,
+  SendOutlined,
+} from "@ant-design/icons";
+import {
+  Breadcrumb,
+  Layout,
+  Menu,
+  theme,
+  Image,
+  Badge,
+  Avatar,
+  Space,
+  Button,
+  Divider,
+  List,
+  Typography,
+  Col,
+  Row,
+  Tooltip,
+} from "antd";
+import { Container } from "reactstrap";
+const { Header, Content, Footer } = Layout;
 
 const BusinessList = () => {
   const [businesses, setBusinesses] = useState([]);
@@ -10,29 +35,15 @@ const BusinessList = () => {
   const [location, setLocation] = useState("");
   const [offset, setOffset] = useState(0);
 
-  const API_KEY =
-    "q84UyfKL8ZFoo-gbZU4Ghbx2mL2ZYOlD7ThIdddAZ-ew1IHUC3tATJ_o_gfF29RgPTOWFeYTgEZyj2FEQSjUZ8vWY9K0S7uVYzCd0XQbmc5etaoHN2YJUvv5atCXZHYx";
-  const API_URL =
-    "https://proxy.cors.sh/https://api.yelp.com/v3/businesses/search?location=NYC&sort_by=best_match&limit=10";
+  const API_URL = "http://localhost:5000/businesses/";
 
   const fetchData = async () => {
     try {
-      const response = await fetch(API_URL, {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${API_KEY}`,
-          "x-cors-api-key": "temp_22596cf94491a5c040ff0a23d71b33d4",
-        },
-        mode: "cors",
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setBusinesses(data.businesses);
-      } else {
-        throw new Error("Error fetching data from Yelp API");
-      }
+      const response = await axios.get(API_URL);
+      setBusinesses(response.data.businesses);
+      console.log("====================================");
+      console.log(response);
+      console.log("====================================");
     } catch (error) {
       console.error(error);
     }
@@ -40,7 +51,7 @@ const BusinessList = () => {
 
   useEffect(() => {
     fetchData();
-  }, [offset]);
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -64,82 +75,102 @@ const BusinessList = () => {
       setOffset(newOffset);
     }
   };
+  const contentStyle = {
+    backgroundColor: "#108ee9",
+  };
 
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
+
+  const [size, setSize] = useState("medium");
   return (
-    <div className="listmenu">
-      <h1>List Bisnis</h1>
-      <form className="form" onSubmit={handleSearch}>
-        <input
-          type="text"
-          placeholder="Cari bisnis"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Lokasi"
-          value={location}
-          onChange={handleLocationChange}
-        />
-        <Button className="btn" type="submit">
-          Cari
-        </Button>
-      </form>
+    <div>
+      <Layout>
+        <Container>
+          <nav className="navbar bg-body-tertiary">
+            <div className="container-fluid">
+              <a className="navbar-brand">
+                <h1 style={{ display: "flex", justifyContent: "flex-start" }}>
+                  List Business
+                </h1>
+                <h6 style={{ display: "flex", justifyContent: "flex-start" }}>
+                  List Business From YELP API
+                </h6>
+              </a>
+              <form className="form" onSubmit={handleSearch}>
+                <select
+                  value={filterTerm}
+                  style={{ marginRight: "0.5rem" }}
+                  onChange={handleFilter}
+                >
+                  <option value="">Semua Kategori</option>
+                  <option value="restaurants">Restoran</option>
+                  <option value="coffee">Kafe</option>
+                  <option value="bars">Bar</option>
+                </select>
+                <input
+                  type="text"
+                  placeholder="Cari bisnis"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  style={{ marginRight: "0.5rem" }}
+                />
+                <input
+                  type="text"
+                  placeholder="Lokasi"
+                  value={location}
+                  onChange={handleLocationChange}
+                />
+                <Tooltip title="search">
+                  <Button
+                    type="primary"
+                    shape="square"
+                    icon={<SearchOutlined />}
+                    style={{ marginRight: "0.5rem" }}
+                  />
+                </Tooltip>
+                <Button type="primary" icon={<SendOutlined />} size={size}>
+                  Apply filter
+                </Button>
+              </form>
+            </div>
+          </nav>
+        </Container>
+      </Layout>
 
-      <select value={filterTerm} onChange={handleFilter}>
-        <option value="">Semua Kategori</option>
-        <option value="restaurants">Restoran</option>
-        <option value="coffee">Kafe</option>
-        <option value="bars">Bar</option>
-      </select>
-
-      {/* <ul>
-        {businesses.map((business) => (
-          <li key={business.id}>{business.name}</li>
-        ))}
-      </ul> */}
-
-      {/* <ul className="list">
-        {businesses.map((business) => (
-          <li key={business.id}>
-            <Link to={`/business/${business.id}`}>{business.name}</Link>
-          </li>
-        ))}
-      </ul> */}
-
-      <List
-        itemLayout="horizontal"
-        dataSource={businesses}
-        renderItem={(item, index) => (
-          <List.Item
-            extra={
-              <img
-                className="responsiveIMG"
-                src={item.image_url}
-                alt={item.name}
-                key={index}
+      <Container>
+        <List
+          style={{ marginTop: "2rem", marginBottom: "2rem" }}
+          itemLayout="horizontal"
+          dataSource={businesses}
+          size="large"
+          pagination={{
+            onChange: (page) => {
+              console.log(page);
+            },
+            pageSize: 8,
+          }}
+          renderItem={(item, index) => (
+            <List.Item
+              extra={
+                <img
+                  className="responsiveIMG"
+                  src={item.image_url}
+                  alt={item.name}
+                  key={index}
+                />
+              }
+            >
+              <List.Item.Meta
+                title={<Link to={`/business/${item.id}`}>{item.name}</Link>}
+                description={item.location.address1}
+                style={{ alignItems: "flex-start" }}
               />
-            }
-          >
-            <List.Item.Meta
-              // avatar={
-              //   <Avatar src={item.image_url} alt={item.name} key={index} />
-              // }
-              title={<Link to={`/business/${item.id}`}>{item.name}</Link>}
-              description={item.alias}
-            />
-          </List.Item>
-        )}
-      />
-
-      <div>
-        <Button className="btn" onClick={() => handlePagination(-10)}>
-          Sebelumnya
-        </Button>
-        <Button className="btn" onClick={() => handlePagination(10)}>
-          Selanjutnya
-        </Button>
-      </div>
+            </List.Item>
+          )}
+        />
+      </Container>
     </div>
   );
 };
