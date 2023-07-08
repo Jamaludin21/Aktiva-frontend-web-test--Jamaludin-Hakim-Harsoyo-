@@ -21,6 +21,11 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/', (req, res) => {
+        console.log('Res', req)
+        res.sendFile(path.join(__dirname, '..', 'public', 'index.html'))
+    })
+
 app.get("/businesses", async (req, res) => {
   try {
     await axios
