@@ -13,7 +13,7 @@ import {
 const BusinessDetail = () => {
   const { id } = useParams();
   const [business, setBusiness] = useState(null);
-
+  // Get YELP API from Serverless node js in vercel
   const API_URL = "https://node-api-vercel-blond.vercel.app/businesses/";
 
   const fetchData = async () => {

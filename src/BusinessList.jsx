@@ -34,6 +34,7 @@ const BusinessList = () => {
   const [location, setLocation] = useState("");
   const [offset, setOffset] = useState(0);
 
+  // Get YELP API from Serverless node js in vercel
   const API_URL = "https://node-api-vercel-blond.vercel.app/businesses";
 
   const fetchData = async (req, res) => {
