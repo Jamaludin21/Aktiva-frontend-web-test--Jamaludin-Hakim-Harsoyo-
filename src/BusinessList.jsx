@@ -7,23 +7,7 @@ import {
   DownloadOutlined,
   SendOutlined,
 } from "@ant-design/icons";
-import {
-  Breadcrumb,
-  Layout,
-  Menu,
-  theme,
-  Image,
-  Badge,
-  Avatar,
-  Space,
-  Button,
-  Divider,
-  List,
-  Typography,
-  Col,
-  Row,
-  Tooltip,
-} from "antd";
+import { Layout, Menu, theme, Button, List, Row, Tooltip } from "antd";
 import { Container } from "reactstrap";
 const { Header, Content, Footer } = Layout;
 
