@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 // import { Button } from "reactstrap";
@@ -35,9 +34,9 @@ const BusinessList = () => {
   const [location, setLocation] = useState("");
   const [offset, setOffset] = useState(0);
 
-  const API_URL = "http://localhost:5000/businesses/";
+  const API_URL = "https://node-api-vercel-blond.vercel.app/businesses";
 
-  const fetchData = async () => {
+  const fetchData = async (req, res) => {
     try {
       const response = await axios.get(API_URL);
       setBusinesses(response.data.businesses);

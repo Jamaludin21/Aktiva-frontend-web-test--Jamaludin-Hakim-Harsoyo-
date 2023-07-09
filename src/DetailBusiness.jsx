@@ -14,7 +14,7 @@ const BusinessDetail = () => {
   const { id } = useParams();
   const [business, setBusiness] = useState(null);
 
-  const API_URL = "http://localhost:5000/businesses/";
+  const API_URL = "https://node-api-vercel-blond.vercel.app/businesses/";
 
   const fetchData = async () => {
     try {
